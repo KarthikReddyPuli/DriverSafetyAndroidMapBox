@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">DriverSafetyAndroidMapBox</string>
+    <string name="mapbox_access_token">pk.eyJ1IjoidnJlZXRodSIsImEiOiJja3liMmF6bGIwNGY5MnZtdGo5eTl1MG1xIn0.iVvwP90q53gOT2eUl5KFqg</string>
 </resources>
