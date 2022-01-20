@@ -43,4 +43,5 @@ dependencies {
 
     //MapBox
     implementation 'com.mapbox.maps:android:10.2.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-core:3.1.0'
 }
