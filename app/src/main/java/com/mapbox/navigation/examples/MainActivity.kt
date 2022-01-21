@@ -98,7 +98,7 @@ class MainActivity : AppCompatActivity(), PermissionsListener {
     private fun buildExamplesList(): List<MapboxExample> {
         return listOf(
             MapboxExample(
-                ContextCompat.getDrawable(this, R.drawable.mapbox_screenshot_tbt_experience),
+                ContextCompat.getDrawable(this, R.drawable.mapbox_screenshot_maneuvers),
                 getString(R.string.title_turn_by_turn),
                 getString(R.string.description_turn_by_turn),
                 TurnByTurnExperienceActivity::class.java
