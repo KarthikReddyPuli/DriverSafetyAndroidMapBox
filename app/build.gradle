@@ -23,6 +23,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'
         vectorDrawables.useSupportLibrary = true
+        buildConfigField "String", "MAPBOX_ACCESS_TOKEN", "\"${System.getenv("MAPBOX_ACCESS_TOKEN")}\""
     }
 
     testOptions {

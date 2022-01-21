@@ -37,6 +37,7 @@ import com.mapbox.navigation.core.trip.session.LocationMatcherResult
 import com.mapbox.navigation.core.trip.session.LocationObserver
 import com.mapbox.navigation.core.trip.session.RouteProgressObserver
 import com.mapbox.navigation.core.trip.session.VoiceInstructionsObserver
+import com.mapbox.navigation.examples.BuildConfig
 import com.mapbox.navigation.examples.R
 import com.mapbox.navigation.examples.databinding.MapboxActivityTurnByTurnExperienceBinding
 import com.mapbox.navigation.ui.base.util.MapboxNavigationConsumer
@@ -73,16 +74,6 @@ import java.util.Locale
 /**
  * This example demonstrates a basic turn-by-turn navigation experience by putting together some UI elements to showcase
  * navigation camera transitions, guidance instructions banners and playback, and progress along the route.
- *
- * Before running the example make sure you have put your access_token in the correct place
- * inside [app/src/main/res/values/mapbox_access_token.xml]. If not present then add this file
- * at the location mentioned above and add the following content to it
- *
- * <?xml version="1.0" encoding="utf-8"?>
- * <resources xmlns:tools="http://schemas.android.com/tools">
- *     <string name="mapbox_access_token"><PUT_YOUR_ACCESS_TOKEN_HERE></string>
- * </resources>
- *
  * The example assumes that you have granted location permissions and does not enforce it. However,
  * the permission is essential for proper functioning of this example. The example also uses replay
  * location engine to facilitate navigation without actually physically moving.
@@ -406,13 +397,17 @@ class TurnByTurnExperienceActivity : AppCompatActivity() {
             enabled = true
         }
 
+        val mapboxAccessToken =
+            if (BuildConfig.MAPBOX_ACCESS_TOKEN != "null") BuildConfig.MAPBOX_ACCESS_TOKEN else getString(
+                R.string.mapbox_access_token
+            )
         // initialize Mapbox Navigation
         mapboxNavigation = if (MapboxNavigationProvider.isCreated()) {
             MapboxNavigationProvider.retrieve()
         } else {
             MapboxNavigationProvider.create(
                 NavigationOptions.Builder(this.applicationContext)
-                    .accessToken(getString(R.string.mapbox_access_token))
+                    .accessToken(mapboxAccessToken)
                     .build()
             )
         }
@@ -480,12 +475,12 @@ class TurnByTurnExperienceActivity : AppCompatActivity() {
         // initialize voice instructions api and the voice instruction player
         speechApi = MapboxSpeechApi(
             this,
-            getString(R.string.mapbox_access_token),
+            mapboxAccessToken,
             Locale.US.language
         )
         voiceInstructionsPlayer = MapboxVoiceInstructionsPlayer(
             this,
-            getString(R.string.mapbox_access_token),
+            mapboxAccessToken,
             Locale.US.language
         )
 
