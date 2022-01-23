@@ -59,6 +59,8 @@ import com.mapbox.navigation.ui.maps.route.line.api.MapboxRouteLineApi
 import com.mapbox.navigation.ui.maps.route.line.api.MapboxRouteLineView
 import com.mapbox.navigation.ui.maps.route.line.model.MapboxRouteLineOptions
 import com.mapbox.navigation.ui.maps.route.line.model.RouteLine
+import com.mapbox.navigation.ui.speedlimit.api.MapboxSpeedLimitApi
+import com.mapbox.navigation.ui.speedlimit.model.SpeedLimitFormatter
 import com.mapbox.navigation.ui.tripprogress.api.MapboxTripProgressApi
 import com.mapbox.navigation.ui.tripprogress.model.DistanceRemainingFormatter
 import com.mapbox.navigation.ui.tripprogress.model.EstimatedTimeToArrivalFormatter
@@ -296,6 +298,15 @@ class TurnByTurnExperienceActivity : AppCompatActivity() {
      * Exposes raw updates coming directly from the location services
      * and the updates enhanced by the Navigation SDK (cleaned up and matched to the road).
      */
+
+    private val speedLimitFormatter: SpeedLimitFormatter by lazy {
+        SpeedLimitFormatter(this)
+    }
+    // Create an instance of the Speed Limit API
+    private val speedLimitApi: MapboxSpeedLimitApi by lazy {
+        MapboxSpeedLimitApi(speedLimitFormatter)
+    }
+
     private val locationObserver = object : LocationObserver {
         var firstLocationUpdateReceived = false
 
@@ -310,6 +321,9 @@ class TurnByTurnExperienceActivity : AppCompatActivity() {
                 location = enhancedLocation,
                 keyPoints = locationMatcherResult.keyPoints,
             )
+
+            //Update Speed Limit
+            binding.speedLimitView.render(speedLimitApi.updateSpeedLimit(locationMatcherResult.speedLimit))
 
             // update camera position to account for new location
             viewportDataSource.onLocationChanged(enhancedLocation)
@@ -435,7 +449,7 @@ class TurnByTurnExperienceActivity : AppCompatActivity() {
                 NavigationOptions.Builder(this.applicationContext)
                     .accessToken(getString(R.string.mapbox_access_token))
                     // comment out the location engine setting block to disable simulation
-                    .locationEngine(replayLocationEngine)
+                    //.locationEngine(replayLocationEngine)
                     .build()
             )
         }
@@ -463,6 +477,7 @@ class TurnByTurnExperienceActivity : AppCompatActivity() {
             }
         }
         // set the padding values depending on screen orientation and visible view layout
+        // ToDo check the below if statements
         if (this.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             viewportDataSource.overviewPadding = landscapeOverviewPadding
         } else {
